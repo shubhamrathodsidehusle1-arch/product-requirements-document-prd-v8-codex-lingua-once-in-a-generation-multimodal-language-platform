@@ -1,21 +1,16 @@
-import { createDatabase } from "@kilocode/app-builder-db";
+import { drizzle } from "drizzle-orm/better-sqlite3";
+import Database from "better-sqlite3";
 import * as schema from "./schema";
 
-let dbInstance: ReturnType<typeof createDatabase> | null = null;
+const sqlite = new Database(process.env.DB_PATH || "local.db");
+export const db = drizzle(sqlite, { schema });
+export { schema };
 
-export function getDb() {
+let dbInstance: Database.Database | null = null;
+
+export function getDb(): Database.Database {
   if (!dbInstance) {
-    const url = process.env.DB_URL;
-    const token = process.env.DB_TOKEN;
-    
-    if (!url || !token) {
-      throw new Error("Missing database configuration. Provide url and token in config or set DB_URL and DB_TOKEN environment variables.");
-    }
-    
-    dbInstance = createDatabase(schema, { url, token });
+    dbInstance = new Database(process.env.DB_PATH || "local.db");
   }
-  
   return dbInstance;
 }
-
-export const db = getDb();

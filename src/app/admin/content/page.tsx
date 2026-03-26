@@ -1,11 +1,10 @@
-import { getDb } from "@/db";
+import { db } from "@/db";
 import { curriculumPaths, curriculumUnits, curriculumLessons, vocabularyItems, aiPersonas, exercises } from "@/db/schema";
 
 export const dynamic = "force-dynamic";
 
 async function getContentData() {
   try {
-    const db = getDb();
     const paths = await db.select().from(curriculumPaths);
     const units = await db.select().from(curriculumUnits);
     const lessons = await db.select().from(curriculumLessons);

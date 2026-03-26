@@ -214,7 +214,7 @@ class KiloCodeProvider extends AIProvider {
 
   constructor() {
     super();
-    this.baseURL = process.env.KILOCODE_API_URL || "https://api.kilo.chat/v1";
+    this.baseURL = process.env.KILOCODE_API_URL || "https://api.kilo.ai/api/gateway";
   }
 
   async chat(messages: ChatMessage[], config: AIConfig): Promise<ChatResponse> {

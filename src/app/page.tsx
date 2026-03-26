@@ -74,7 +74,7 @@ export default function Home() {
             <Link href="#languages" className="nav-link">Languages</Link>
             <Link href="#features" className="nav-link">Features</Link>
             <Link href="#pricing" className="nav-link">Pricing</Link>
-            <button className="btn-primary">Get Started</button>
+            <Link href="/auth/signin" className="btn-primary">Get Started</Link>
           </div>
         </div>
       </nav>
@@ -101,12 +101,12 @@ export default function Home() {
             </p>
             
             <div className="flex items-center justify-center gap-4">
-              <button className="btn-primary text-lg px-8">
+              <Link href="/auth/signin" className="btn-primary text-lg px-8">
                 Start Learning Free
-              </button>
-              <button className="btn-secondary text-lg px-8">
+              </Link>
+              <Link href="/auth/signin" className="btn-secondary text-lg px-8">
                 Watch Demo
-              </button>
+              </Link>
             </div>
           </div>
 
@@ -230,9 +230,9 @@ export default function Home() {
           </div>
 
           <div className="text-center mt-12">
-            <button className="btn-secondary">
+            <Link href="/auth/signin" className="btn-secondary">
               View all 120+ languages →
-            </button>
+            </Link>
           </div>
         </div>
       </section>
@@ -259,7 +259,7 @@ export default function Home() {
                 <li>✅ Basic vocabulary decks</li>
                 <li>✅ Community features</li>
               </ul>
-              <button className="btn-secondary w-full">Get Started</button>
+              <Link href="/auth/signin" className="btn-secondary w-full">Get Started</Link>
             </div>
             
             <div className="glass-card p-8 border-brand-500/50 relative">
@@ -276,7 +276,7 @@ export default function Home() {
                 <li>✅ Full offline mode</li>
                 <li>✅ Advanced analytics</li>
               </ul>
-              <button className="btn-primary w-full">Start Free Trial</button>
+              <Link href="/auth/signin" className="btn-primary w-full">Start Free Trial</Link>
             </div>
             
             <div className="glass-card p-8">
@@ -290,7 +290,7 @@ export default function Home() {
                 <li>✅ API access</li>
                 <li>✅ Priority support</li>
               </ul>
-              <button className="btn-secondary w-full">Go Pro</button>
+              <Link href="/auth/signin" className="btn-secondary w-full">Go Pro</Link>
             </div>
           </div>
         </div>
@@ -304,9 +304,9 @@ export default function Home() {
           <p className="text-slate-400 text-lg mb-8 max-w-2xl mx-auto">
             Join millions of learners mastering new languages with AI by their side
           </p>
-          <button className="btn-primary text-lg px-12 py-4">
+          <Link href="/auth/signin" className="btn-primary text-lg px-12 py-4">
             Start Learning Now - It&apos;s Free
-          </button>
+          </Link>
         </div>
       </section>
 

@@ -25,6 +25,11 @@ Codex Lingua - "Once-in-a-Generation" Multimodal Language Platform. Complete wit
 - [x] Achievements (/achievements) - achievements list with progress, categories, XP rewards
 - [x] Language Search on Landing - search 120+ languages with autocomplete
 - [x] Onboarding Flow (/onboarding) - 4-step: language, level, goals, time commitment
+- [x] Exam Preparation (/exam-prep) - IELTS, DELE, JLPT, HSK guides and practice tests
+- [x] Leaderboard (/leaderboard) - global rankings with weekly/monthly/all-time views
+- [x] Writing Studio (/writing) - prompts, AI feedback on grammar/vocabulary/style
+- [x] Language Detail Page (/languages/[code]) - language info, CEFR levels, features
+- [x] Error Pages - 404, 500, and loading states
 
 ## Full-Stack Architecture
 
@@ -46,7 +51,11 @@ Codex Lingua - "Once-in-a-Generation" Multimodal Language Platform. Complete wit
 | /progress | Detailed progress tracking |
 | /achievements | Achievements and milestones |
 | /classes | Live classes schedule |
+| /leaderboard | Global leaderboard rankings |
+| /exam-prep | Exam preparation (IELTS, DELE, JLPT, HSK) |
+| /writing | Writing studio with AI feedback |
 | /onboarding | New user 4-step onboarding |
+| /languages/[code] | Language detail page with CEFR info |
 | /learn/[code] | Language learning with 6 tabs |
 | /learn/[code]/practice | Exercise practice |
 | /learn/[code]/review | Vocabulary review (SRS) |
@@ -56,6 +65,9 @@ Codex Lingua - "Once-in-a-Generation" Multimodal Language Platform. Complete wit
 | /settings/ai | AI provider settings |
 | /admin/content | Content management |
 | /auth/signin | Sign in page |
+| /not-found | 404 error page |
+| /error | 500 error page |
+| /loading | Loading state |
 
 ## API Routes
 

@@ -1,4 +1,4 @@
-# System Patterns: Next.js Starter Template
+# System Patterns: Codex Lingua
 
 ## Architecture Overview
 
@@ -6,115 +6,134 @@
 src/
 ├── app/                    # Next.js App Router
 │   ├── layout.tsx          # Root layout + metadata
-│   ├── page.tsx            # Home page
-│   ├── globals.css         # Tailwind imports + global styles
-│   └── favicon.ico         # Site icon
+│   ├── page.tsx            # Landing page
+│   ├── globals.css         # Custom Tailwind theme
+│   └── learn/
+│       └── [code]/         # Language learning pages
+├── db/                     # Database layer
+│   ├── schema.ts           # Drizzle schema (21 tables)
+│   ├── index.ts            # Database client
+│   ├── migrate.ts          # Migration runner
+│   └── migrations/        # Generated migrations
 └── (expand as needed)
-    ├── components/         # React components (add when needed)
-    ├── lib/                # Utilities and helpers (add when needed)
-    └── db/                 # Database files (add via recipe)
+    ├── components/         # React components
+    ├── lib/                # Utilities
+    ├── actions/           # Server actions
+    └── api/               # API routes
 ```
+
+## Database Schema (21 Tables)
+
+### Core
+- `users` - User accounts and preferences
+- `languages` - Language catalog with tiers
+- `user_languages` - User's target languages and progress
+
+### Curriculum
+- `curriculum_paths` - CEFR-level paths per language
+- `curriculum_units` - Units within paths
+- `curriculum_lessons` - Individual lessons
+
+### Vocabulary & Exercises
+- `vocabulary_items` - Word definitions, translations
+- `user_vocabulary` - SRS state per user/word
+- `exercises` - Exercise definitions
+- `exercise_attempts` - User attempts
+- `user_exercise_progress` - Mastery tracking
+
+### AI & Conversation
+- `ai_personas` - AI tutor configurations
+- `ai_conversation_sessions` - Session metadata
+- `ai_conversation_messages` - Message history
+
+### Speech
+- `speech_recordings` - User recordings with scores
+
+### Subscriptions & Notifications
+- `subscription_plans` - Plan definitions
+- `user_subscriptions` - User's active subscription
+- `notifications` - User notifications
+
+### Analytics & Gamification
+- `learning_events` - Daily activity logs
+- `achievements` - Badge definitions
+- `user_achievements` - Unlocked badges
 
 ## Key Design Patterns
 
 ### 1. App Router Pattern
 
-Uses Next.js App Router with file-based routing:
 ```
 src/app/
-├── page.tsx           # Route: /
-├── about/page.tsx     # Route: /about
-├── blog/
-│   ├── page.tsx       # Route: /blog
-│   └── [slug]/page.tsx # Route: /blog/:slug
+├── page.tsx              # Landing page: /
+├── learn/
+│   └── [code]/           # Language pages: /learn/es
+│       └── page.tsx
 └── api/
-    └── route.ts       # API Route: /api
+    └── route.ts          # API: /api/*
 ```
 
-### 2. Component Organization Pattern (When Expanding)
-
-```
-src/components/
-├── ui/                # Reusable UI components (Button, Card, etc.)
-├── layout/            # Layout components (Header, Footer)
-├── sections/          # Page sections (Hero, Features, etc.)
-└── forms/             # Form components
-```
-
-### 3. Server Components by Default
+### 2. Server Components by Default
 
 All components are Server Components unless marked with `"use client"`:
 ```tsx
-// Server Component (default) - can fetch data, access DB
-export default function Page() {
-  return <div>Server rendered</div>;
+// Server Component - can fetch data, access DB
+export default async function Page() {
+  const data = await db.select().from(users);
+  return <div>{data.length} users</div>;
 }
 
 // Client Component - for interactivity
 "use client";
-export default function Counter() {
+export function Counter() {
   const [count, setCount] = useState(0);
   return <button onClick={() => setCount(c => c + 1)}>{count}</button>;
 }
 ```
 
-### 4. Layout Pattern
+### 3. Database Access Pattern
 
-Layouts wrap pages and can be nested:
 ```tsx
-// src/app/layout.tsx - Root layout
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en">
-      <body>{children}</body>
-    </html>
-  );
-}
+import { db } from "@/db";
+import { users } from "@/db/schema";
+import { eq } from "drizzle-orm";
 
-// src/app/dashboard/layout.tsx - Nested layout
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="flex">
-      <Sidebar />
-      <main>{children}</main>
-    </div>
-  );
+export async function getUser(id: number) {
+  return db.select().from(users).where(eq(users.id, id));
 }
+```
+
+### 4. Component Organization
+
+```
+src/components/
+├── ui/                   # Reusable (Button, Card, Input)
+├── layout/               # (Header, Footer, Sidebar)
+├── sections/             # (Hero, Features, Pricing)
+└── learn/                # Language-specific components
 ```
 
 ## Styling Conventions
 
-### Tailwind CSS Usage
-- Utility classes directly on elements
-- Component composition for repeated patterns
-- Responsive: `sm:`, `md:`, `lg:`, `xl:`
+### Tailwind CSS 4 Theme
 
-### Common Patterns
-```tsx
-// Container
-<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+Custom theme in `globals.css`:
+- `--color-brand-*` - Primary blue palette
+- `--color-accent-*` - Purple/pink for highlights
+- `--color-surface-*` - Dark theme colors
 
-// Responsive grid
-<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-// Flexbox centering
-<div className="flex items-center justify-center">
-```
-
-## File Naming Conventions
-
-- Components: PascalCase (`Button.tsx`, `Header.tsx`)
-- Utilities: camelCase (`utils.ts`, `helpers.ts`)
-- Pages/Routes: lowercase (`page.tsx`, `layout.tsx`)
-- Directories: kebab-case (`api-routes/`) or lowercase (`components/`)
+Component classes:
+- `.glass-card` - Glassmorphism cards
+- `.gradient-text` - Animated gradient text
+- `.btn-primary` / `.btn-secondary` - Styled buttons
+- `.input-search` - Styled search inputs
 
 ## State Management
 
-For simple needs:
-- `useState` for local component state
-- `useContext` for shared state
+For MVP:
 - Server Components for data fetching
+- `useState` for local component state
 
-For complex needs (add when necessary):
+Future considerations:
 - Zustand for client state
-- React Query for server state
+- React Query for server state caching

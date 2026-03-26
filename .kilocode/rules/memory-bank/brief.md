@@ -1,48 +1,49 @@
-# Project Brief: Next.js Starter Template
+# Project Brief: Codex Lingua
 
 ## Purpose
 
-This is a minimal Next.js starter template designed for AI-assisted development. It provides a clean foundation that can be extended to build any type of web application through interaction with an AI assistant.
+Build the world's most advanced language mastery companion: AI-native, community-powered, spanning 120+ languages across reading, listening, speaking, writing, culture, and life.
 
 ## Target Users
 
-- Developers wanting a clean Next.js starting point
-- Users building applications through AI-assisted coding
-- Teams needing a standardized, modern Next.js setup
+- Global Professionals (business fluency, corporate compliance)
+- Creators/Polyglots (continuous improvement, niche language exploration)
+- Students/Test Takers (IELTS, DELE, JLPT exam preparation)
+- Migrants/Travelers (everyday survival + cultural cues)
+- Heritage Learners (reclaiming family language)
 
 ## Core Use Case
 
-Users describe what they want to build to an AI assistant, which then expands this template by:
-
-1. Adding components and pages as needed
-2. Installing additional dependencies
-3. Setting up databases, authentication, etc. using recipes
-4. Customizing styling and branding
+Users sign up, select a language, take a placement assessment, and then follow a CEFR-aligned curriculum with AI tutoring, vocabulary SRS, pronunciation lab, and writing studio.
 
 ## Key Requirements
 
 ### Must Have
 
-- Modern Next.js 16 setup with App Router
-- TypeScript for type safety
-- Tailwind CSS 4 for styling
-- ESLint for code quality
-- Clean, minimal starting structure
-- Bun as package manager
+- 120+ language support with tiered AI capabilities
+- AI personas for conversation practice
+- Spaced repetition vocabulary system
+- Pronunciation lab with speech recognition
+- CEFR-aligned curriculum (A1-C2)
+- Subscription tiers (Free, Plus, Pro)
+- Landing page with language selection
 
 ### Nice to Have
 
-- Recipe system for common additions (database, auth)
-- Memory bank for AI context persistence
-- Clear development guidelines
+- Live classes with instructors
+- Marketplace for creator content
+- Offline mode with downloadable packs
+- Browser extension for contextual learning
 
 ## Success Metrics
 
-- Clean, zero-error TypeScript setup
-- Passing lint and type checks
+- Day 30 retention ≥ 45%
+- Monthly engaged hours / user ≥ 12h
+- AI coaching NPS ≥ 65
 
 ## Constraints
 
-- Minimal dependencies by default
 - Framework: Next.js 16 + React 19 + Tailwind CSS 4
 - Package manager: Bun
+- Database: Drizzle ORM + SQLite
+- MVP scope: Landing page + database schema

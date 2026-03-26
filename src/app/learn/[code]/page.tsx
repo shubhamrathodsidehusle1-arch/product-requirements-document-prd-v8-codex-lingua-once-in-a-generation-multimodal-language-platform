@@ -293,7 +293,43 @@ export default function LearnPage({ params }: { params: Promise<{ code: string }
         return (
           <div className="space-y-6">
             <div className="glass-card p-6">
-              <h3 className="text-xl font-semibold mb-4">Spanish Learning Community</h3>
+              <h3 className="text-xl font-semibold mb-4">Live Classes</h3>
+              <div className="space-y-3">
+                <div className="flex items-center gap-4 p-4 bg-white/5 rounded-xl">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-500 to-accent-500 flex items-center justify-center text-2xl">
+                    👥
+                  </div>
+                  <div className="flex-1">
+                    <div className="font-medium">Spanish Conversation Club</div>
+                    <div className="text-sm text-slate-400">Group • A2 • 8/50 spots</div>
+                  </div>
+                  <button className="btn-primary text-sm px-4">Join</button>
+                </div>
+                <div className="flex items-center gap-4 p-4 bg-white/5 rounded-xl">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-accent-500 to-brand-500 flex items-center justify-center text-2xl">
+                    📚
+                  </div>
+                  <div className="flex-1">
+                    <div className="font-medium">Grammar Workshop: Ser vs Estar</div>
+                    <div className="text-sm text-slate-400">Masterclass • B1 • Tomorrow, 3:00 PM</div>
+                  </div>
+                  <button className="btn-secondary text-sm px-4">Details</button>
+                </div>
+                <div className="flex items-center gap-4 p-4 bg-white/5 rounded-xl">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-brand-500 flex items-center justify-center text-2xl">
+                    🎯
+                  </div>
+                  <div className="flex-1">
+                    <div className="font-medium">1-on-1 Pronunciation Practice</div>
+                    <div className="text-sm text-slate-400">Private • A1 • 30 min session</div>
+                  </div>
+                  <button className="btn-secondary text-sm px-4">Book</button>
+                </div>
+              </div>
+            </div>
+
+            <div className="glass-card p-6">
+              <h3 className="text-xl font-semibold mb-4">Learning Community</h3>
               <div className="space-y-3">
                 <div className="flex items-center gap-4 p-3 bg-white/5 rounded-xl">
                   <div className="w-10 h-10 rounded-full bg-gradient-to-br from-accent-500 to-brand-500 flex items-center justify-center">
@@ -319,7 +355,7 @@ export default function LearnPage({ params }: { params: Promise<{ code: string }
             </div>
 
             <div className="glass-card p-6">
-              <h3 className="text-lg font-semibold mb-3">Live Events</h3>
+              <h3 className="text-lg font-semibold mb-3">Upcoming Events</h3>
               <div className="space-y-2">
                 <div className="p-3 bg-brand-500/10 border border-brand-500/20 rounded-lg">
                   <div className="font-medium text-brand-400">🎙️ Live: Spanish Storytelling</div>

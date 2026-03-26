@@ -95,10 +95,9 @@ export default function LearnPage({ params }: { params: Promise<{ code: string }
               <h3 className="text-xl font-semibold mb-4">Your Lessons</h3>
               <div className="space-y-3">
                 {LESSONS.map((lesson) => (
-                  <button
+                  <div
                     key={lesson.id}
-                    onClick={() => setSelectedLesson(lesson.id)}
-                    className={`w-full flex items-center gap-4 p-4 rounded-xl transition-all ${
+                    className={`flex items-center gap-4 p-4 rounded-xl transition-all ${
                       selectedLesson === lesson.id 
                         ? "bg-brand-500/20 border-brand-500/50" 
                         : "bg-white/5 hover:bg-white/10 border border-transparent"
@@ -113,8 +112,13 @@ export default function LearnPage({ params }: { params: Promise<{ code: string }
                       <div className="font-medium">{lesson.title}</div>
                       <div className="text-sm text-slate-400">{lesson.duration} min</div>
                     </div>
-                    <div className="text-2xl">→</div>
-                  </button>
+                    <Link 
+                      href={`/learn/${code}/practice`}
+                      className="px-4 py-2 bg-brand-500/20 text-brand-400 rounded-lg text-sm hover:bg-brand-500/30"
+                    >
+                      Practice
+                    </Link>
+                  </div>
                 ))}
               </div>
             </div>

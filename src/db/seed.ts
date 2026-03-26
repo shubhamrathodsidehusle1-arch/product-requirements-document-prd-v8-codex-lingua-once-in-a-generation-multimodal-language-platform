@@ -1,5 +1,5 @@
 import { db } from "./index";
-import { languages, vocabularyItems, curriculumPaths, curriculumUnits, curriculumLessons, aiPersonas, subscriptionPlans, achievements } from "./schema";
+import { languages, vocabularyItems, curriculumPaths, curriculumUnits, curriculumLessons, aiPersonas, subscriptionPlans, achievements, exercises } from "./schema";
 
 const SEED_LANGUAGES = [
   { code: "es", name: "Spanish", nativeName: "Español", script: "latin", direction: "ltr", tier: "A", releaseStage: "released", aiSupport: JSON.stringify({ chat: "gpt-5", speech: "whisper-x", tts: "custom" }) },
@@ -76,6 +76,21 @@ const SEED_ACHIEVEMENTS = [
   { name: "Perfect Pronunciation", description: "Get 100% on 10 pronunciation exercises", category: "expert", criteria: JSON.stringify({ type: "pronunciationPerfect", value: 10 }), points: 150, tier: "gold" },
 ];
 
+const SEED_EXERCISES = [
+  { lessonId: 1, exerciseType: "multiple_choice", difficultyLevel: 1, content: JSON.stringify({ question: "How do you say 'Hello' in Spanish?", options: ["Hola", "Adiós", "Gracias", "Por favor"], correctAnswer: "Hola" }), pointsPossible: 10 },
+  { lessonId: 1, exerciseType: "fill_blank", difficultyLevel: 1, content: JSON.stringify({ question: "Complete: ___ (Hello)", correctAnswer: "Hola", hint: "Starts with H" }), pointsPossible: 15 },
+  { lessonId: 1, exerciseType: "matching", difficultyLevel: 1, content: JSON.stringify({ pairs: [{ term: "Hola", definition: "Hello" }, { term: "Adiós", definition: "Goodbye" }, { term: "Gracias", definition: "Thank you" }, { term: "Por favor", definition: "Please" }] }), pointsPossible: 20 },
+  { lessonId: 2, exerciseType: "speaking", difficultyLevel: 2, content: JSON.stringify({ prompt: "Say: Me llamo María", targetText: "Me llamo María", language: "es" }), pointsPossible: 25 },
+  { lessonId: 2, exerciseType: "multiple_choice", difficultyLevel: 1, content: JSON.stringify({ question: "What does 'Me llamo' mean?", options: ["My name is", "I am from", "I like", "Thank you"], correctAnswer: "My name is" }), pointsPossible: 10 },
+  { lessonId: 3, exerciseType: "multiple_choice", difficultyLevel: 1, content: JSON.stringify({ question: "What number is 'cinco'?", options: ["5", "3", "7", "9"], correctAnswer: "5" }), pointsPossible: 10 },
+  { lessonId: 3, exerciseType: "fill_blank", difficultyLevel: 2, content: JSON.stringify({ question: "Three = ___", correctAnswer: "tres", hint: "Sounds like 'trace'" }), pointsPossible: 15 },
+  { lessonId: 4, exerciseType: "matching", difficultyLevel: 1, content: JSON.stringify({ pairs: [{ term: "uno", definition: "one" }, { term: "dos", definition: "two" }, { term: "tres", definition: "three" }, { term: "cuatro", definition: "four" }, { term: "cinco", definition: "five" }] }), pointsPossible: 25 },
+  { lessonId: 5, exerciseType: "multiple_choice", difficultyLevel: 1, content: JSON.stringify({ question: "How do you say 'water' in Spanish?", options: ["agua", "comida", "casa", "libro"], correctAnswer: "agua" }), pointsPossible: 10 },
+  { lessonId: 5, exerciseType: "fill_blank", difficultyLevel: 2, content: JSON.stringify({ question: "I want water = Quiero ___", correctAnswer: "agua", hint: "Water" }), pointsPossible: 15 },
+  { lessonId: 6, exerciseType: "speaking", difficultyLevel: 2, content: JSON.stringify({ prompt: "Say: ¿Qué quiere comer?", targetText: "¿Qué quiere comer?", language: "es" }), pointsPossible: 25 },
+  { lessonId: 6, exerciseType: "multiple_choice", difficultyLevel: 2, content: JSON.stringify({ question: "What is the plural of 'libro'?", options: ["libros", "libra", "libros", "libritos"], correctAnswer: "libros" }), pointsPossible: 10 },
+];
+
 async function seed() {
   console.log("Seeding database...");
 
@@ -118,6 +133,10 @@ async function seed() {
   // Seed achievements
   await db.insert(achievements).values(SEED_ACHIEVEMENTS).onConflictDoNothing();
   console.log("Achievements seeded");
+
+  // Seed exercises
+  await db.insert(exercises).values(SEED_EXERCISES).onConflictDoNothing();
+  console.log("Exercises seeded");
 
   console.log("Seeding complete!");
 }

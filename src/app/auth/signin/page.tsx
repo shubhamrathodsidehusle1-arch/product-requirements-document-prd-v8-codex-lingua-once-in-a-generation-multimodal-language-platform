@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -95,7 +96,7 @@ export default function SignInPage() {
         </div>
 
         <p className="text-center text-slate-500 text-sm mt-6">
-          <a href="/" className="hover:text-white">← Back to home</a>
+          <Link href="/" className="hover:text-white">← Back to home</Link>
         </p>
       </div>
     </div>

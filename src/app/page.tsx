@@ -1,30 +1,38 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 
-const TIER_A_LANGUAGES = [
-  { code: "es", name: "Spanish", nativeName: "Español", flag: "🇪🇸" },
-  { code: "en", name: "English", nativeName: "English", flag: "🇬🇧" },
-  { code: "zh", name: "Chinese", nativeName: "中文", flag: "🇨🇳" },
-  { code: "fr", name: "French", nativeName: "Français", flag: "🇫🇷" },
-  { code: "de", name: "German", nativeName: "Deutsch", flag: "🇩🇪" },
-  { code: "ja", name: "Japanese", nativeName: "日本語", flag: "🇯🇵" },
-  { code: "ko", name: "Korean", nativeName: "한국어", flag: "🇰🇷" },
-  { code: "pt", name: "Portuguese", nativeName: "Português", flag: "🇵🇹" },
-  { code: "it", name: "Italian", nativeName: "Italiano", flag: "🇮🇹" },
-  { code: "ru", name: "Russian", nativeName: "Русский", flag: "🇷🇺" },
+const ALL_LANGUAGES = [
+  { code: "es", name: "Spanish", nativeName: "Español", flag: "🇪🇸", tier: "A" },
+  { code: "en", name: "English", nativeName: "English", flag: "🇬🇧", tier: "A" },
+  { code: "zh", name: "Chinese", nativeName: "中文", flag: "🇨🇳", tier: "A" },
+  { code: "fr", name: "French", nativeName: "Français", flag: "🇫🇷", tier: "A" },
+  { code: "de", name: "German", nativeName: "Deutsch", flag: "🇩🇪", tier: "A" },
+  { code: "ja", name: "Japanese", nativeName: "日本語", flag: "🇯🇵", tier: "A" },
+  { code: "ko", name: "Korean", nativeName: "한국어", flag: "🇰🇷", tier: "A" },
+  { code: "pt", name: "Portuguese", nativeName: "Português", flag: "🇵🇹", tier: "A" },
+  { code: "it", name: "Italian", nativeName: "Italiano", flag: "🇮🇹", tier: "A" },
+  { code: "ru", name: "Russian", nativeName: "Русский", flag: "🇷🇺", tier: "A" },
+  { code: "ar", name: "Arabic", nativeName: "العربية", flag: "🇸🇦", tier: "B" },
+  { code: "hi", name: "Hindi", nativeName: "हिन्दी", flag: "🇮🇳", tier: "B" },
+  { code: "tr", name: "Turkish", nativeName: "Türkçe", flag: "🇹🇷", tier: "B" },
+  { code: "vi", name: "Vietnamese", nativeName: "Tiếng Việt", flag: "🇻🇳", tier: "B" },
+  { code: "th", name: "Thai", nativeName: "ไทย", flag: "🇹🇭", tier: "B" },
+  { code: "id", name: "Indonesian", nativeName: "Bahasa Indonesia", flag: "🇮🇩", tier: "B" },
+  { code: "pl", name: "Polish", nativeName: "Polski", flag: "🇵🇱", tier: "B" },
+  { code: "nl", name: "Dutch", nativeName: "Nederlands", flag: "🇳🇱", tier: "B" },
+  { code: "he", name: "Hebrew", nativeName: "עברית", flag: "🇮🇱", tier: "B" },
+  { code: "sv", name: "Swedish", nativeName: "Svenska", flag: "🇸🇪", tier: "B" },
+  { code: "el", name: "Greek", nativeName: "Ελληνικά", flag: "🇬🇷", tier: "B" },
+  { code: "cs", name: "Czech", nativeName: "Čeština", flag: "🇨🇿", tier: "B" },
+  { code: "sv", name: "Swedish", nativeName: "Svenska", flag: "🇸🇪", tier: "B" },
+  { code: "uk", name: "Ukrainian", nativeName: "Українська", flag: "🇺🇦", tier: "C" },
+  { code: "hi", name: "Hindi", nativeName: "हिन्दी", flag: "🇮🇳", tier: "C" },
 ];
 
-const TIER_B_LANGUAGES = [
-  { code: "ar", name: "Arabic", nativeName: "العربية", flag: "🇸🇦" },
-  { code: "hi", name: "Hindi", nativeName: "हिन्दी", flag: "🇮🇳" },
-  { code: "tr", name: "Turkish", nativeName: "Türkçe", flag: "🇹🇷" },
-  { code: "vi", name: "Vietnamese", nativeName: "Tiếng Việt", flag: "🇻🇳" },
-  { code: "th", name: "Thai", nativeName: "ไทย", flag: "🇹🇭" },
-  { code: "id", name: "Indonesian", nativeName: "Bahasa Indonesia", flag: "🇮🇩" },
-  { code: "pl", name: "Polish", nativeName: "Polski", flag: "🇵🇱" },
-  { code: "nl", name: "Dutch", nativeName: "Nederlands", flag: "🇳🇱" },
-  { code: "he", name: "Hebrew", nativeName: "עברית", flag: "🇮🇱" },
-  { code: "sv", name: "Swedish", nativeName: "Svenska", flag: "🇸🇪" },
-];
+const TIER_A_LANGUAGES = ALL_LANGUAGES.filter(l => l.tier === "A");
+const TIER_B_LANGUAGES = ALL_LANGUAGES.filter(l => l.tier === "B");
 
 const FEATURES = [
   {
@@ -60,6 +68,15 @@ const FEATURES = [
 ];
 
 export default function Home() {
+  const [searchQuery, setSearchQuery] = useState("");
+  
+  const filteredLanguages = searchQuery 
+    ? ALL_LANGUAGES.filter(l => 
+        l.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        l.nativeName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        l.code.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : [];
   return (
     <div className="min-h-screen bg-surface-dark">
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-surface-dark/80 backdrop-blur-xl">
@@ -184,50 +201,97 @@ export default function Home() {
             <h2 className="text-4xl font-bold mb-4">
               Choose your <span className="gradient-text">language</span>
             </h2>
-            <p className="text-slate-400 text-lg">
+            <p className="text-slate-400 text-lg mb-8">
               Start with our most popular languages - more coming soon
             </p>
-          </div>
-
-          <div className="mb-12">
-            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              <span className="w-3 h-3 rounded-full bg-brand-500" />
-              Tier A - Full AI Support
-            </h3>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-              {TIER_A_LANGUAGES.map((lang) => (
-                <Link 
-                  key={lang.code} 
-                  href={`/learn/${lang.code}`}
-                  className="language-card text-center"
-                >
-                  <div className="text-4xl mb-2">{lang.flag}</div>
-                  <div className="font-medium text-white">{lang.name}</div>
-                  <div className="text-sm text-slate-400">{lang.nativeName}</div>
-                </Link>
-              ))}
+            
+            <div className="max-w-md mx-auto relative">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search languages..."
+                className="w-full px-6 py-4 bg-white/10 border border-white/10 rounded-full text-white placeholder:text-slate-500 focus:outline-none focus:border-brand-500/50 pr-12"
+              />
+              <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400">
+                🔍
+              </span>
+              {searchQuery && filteredLanguages.length > 0 && (
+                <div className="absolute top-full left-0 right-0 mt-2 bg-surface-dark border border-white/10 rounded-xl overflow-hidden z-10 shadow-xl">
+                  {filteredLanguages.map((lang) => (
+                    <Link
+                      key={lang.code}
+                      href={`/learn/${lang.code}`}
+                      className="flex items-center gap-3 p-3 hover:bg-white/5 transition-colors"
+                      onClick={() => setSearchQuery("")}
+                    >
+                      <span className="text-2xl">{lang.flag}</span>
+                      <div>
+                        <div className="font-medium">{lang.name}</div>
+                        <div className="text-sm text-slate-400">{lang.nativeName}</div>
+                      </div>
+                      <span className={`ml-auto text-xs px-2 py-1 rounded ${
+                        lang.tier === "A" ? "bg-brand-500/20 text-brand-400" :
+                        lang.tier === "B" ? "bg-accent-500/20 text-accent-400" :
+                        "bg-slate-500/20 text-slate-400"
+                      }`}>
+                        Tier {lang.tier}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              )}
+              {searchQuery && filteredLanguages.length === 0 && (
+                <div className="absolute top-full left-0 right-0 mt-2 bg-surface-dark border border-white/10 rounded-xl p-4 z-10">
+                  <p className="text-slate-400 text-center">No languages found</p>
+                </div>
+              )}
             </div>
           </div>
 
-          <div>
-            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              <span className="w-3 h-3 rounded-full bg-accent-500" />
-              Tier B - Growth Markets
-            </h3>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-              {TIER_B_LANGUAGES.map((lang) => (
-                <Link 
-                  key={lang.code} 
-                  href={`/learn/${lang.code}`}
-                  className="language-card text-center opacity-70 hover:opacity-100"
-                >
-                  <div className="text-4xl mb-2">{lang.flag}</div>
-                  <div className="font-medium text-white">{lang.name}</div>
-                  <div className="text-sm text-slate-400">{lang.nativeName}</div>
-                </Link>
-              ))}
+          {!searchQuery && (
+            <>
+            <div className="mb-12">
+              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                <span className="w-3 h-3 rounded-full bg-brand-500" />
+                Tier A - Full AI Support
+              </h3>
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                {TIER_A_LANGUAGES.map((lang) => (
+                  <Link 
+                    key={lang.code} 
+                    href={`/learn/${lang.code}`}
+                    className="language-card text-center"
+                  >
+                    <div className="text-4xl mb-2">{lang.flag}</div>
+                    <div className="font-medium text-white">{lang.name}</div>
+                    <div className="text-sm text-slate-400">{lang.nativeName}</div>
+                  </Link>
+                ))}
+              </div>
             </div>
-          </div>
+
+            <div>
+              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                <span className="w-3 h-3 rounded-full bg-accent-500" />
+                Tier B - Growth Markets
+              </h3>
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                {TIER_B_LANGUAGES.map((lang) => (
+                  <Link 
+                    key={lang.code} 
+                    href={`/learn/${lang.code}`}
+                    className="language-card text-center opacity-70 hover:opacity-100"
+                  >
+                    <div className="text-4xl mb-2">{lang.flag}</div>
+                    <div className="font-medium text-white">{lang.name}</div>
+                    <div className="text-sm text-slate-400">{lang.nativeName}</div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+            </>
+          )}
 
           <div className="text-center mt-12">
             <Link href="/auth/signin" className="btn-secondary">

@@ -199,9 +199,9 @@ export default function LearnPage({ params }: { params: Promise<{ code: string }
               </div>
             </div>
 
-            <button className="btn-primary w-full py-4">
+            <Link href={`/learn/${code}/review`} className="btn-primary w-full py-4 text-center block">
               Start Vocabulary Review (5 due)
-            </button>
+            </Link>
           </div>
         );
 

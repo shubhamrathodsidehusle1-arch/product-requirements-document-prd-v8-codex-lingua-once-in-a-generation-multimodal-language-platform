@@ -1,50 +1,51 @@
-# Active Context: Codex Lingua MVP
+# Active Context: Codex Lingua Full-Stack App
 
 ## Current State
 
-**Project Status**: ✅ Landing page + language learning page implemented
+**Project Status**: ✅ Full-stack with auth, APIs, database, seed data
 
-Codex Lingua - "Once-in-a-Generation" Multimodal Language Platform. Landing page and language learning interface complete.
+Codex Lingua - "Once-in-a-Generation" Multimodal Language Platform. Full-stack with authentication, API routes, server actions, and database seeding.
 
 ## Recently Completed
 
-- [x] Landing page with hero, features, language catalog, pricing
-- [x] Language learning page at `/learn/[code]` with 6 tabs:
-  - Learn: lessons, XP progress, level tracking
-  - AI Tutor: chat interface with persona
-  - Vocabulary: SRS deck with mastered/learning status
-  - Pronunciation: audio playback, recording UI
-  - Writing: text input, templates, AI feedback
-  - Community: groups, live events
-- [x] Sidebar with navigation and daily progress
+- [x] Add NextAuth.js authentication with credentials provider
+- [x] Create /auth/signin page for user login
+- [x] Add API routes: /api/languages, /api/vocabulary, /api/curriculum, /api/ai/personas
+- [x] Create server actions for vocabulary and curriculum
+- [x] Add database seed script with 15 languages, vocabulary, curriculum, personas, plans, achievements
+- [x] Add TypeScript declarations for next-auth
 - [x] TypeScript + ESLint passing
 
-## Current Structure
+## Full-Stack Architecture
 
-| File/Directory | Purpose | Status |
-|----------------|---------|--------|
-| `src/app/page.tsx` | Landing page | ✅ |
-| `src/app/learn/[code]/page.tsx` | Language learning page | ✅ |
-| `src/db/schema.ts` | 21 database tables | ✅ |
+| Layer | Components |
+|-------|------------|
+| Auth | NextAuth.js with credentials provider |
+| API | REST endpoints for languages, vocabulary, curriculum, AI personas |
+| Server Actions | getVocabulary, getCurriculum for server components |
+| Database | 21 tables via Drizzle ORM + SQLite |
+| Seed | Initial data: 15 languages, 10 Spanish vocab, curriculum, personas, plans, achievements |
 
-## Current Focus
+## API Routes
 
-Next steps could include:
-1. Add API routes for backend functionality
-2. Connect to database for persistent data
-3. Add user authentication
-4. Create actual lesson content
+- `GET /api/languages` - List all languages
+- `GET /api/vocabulary?language=es` - Get vocabulary items
+- `GET /api/curriculum` - Get curriculum paths with units and lessons
+- `GET /api/ai/personas?language=es` - Get AI personas
+- `POST /api/ai/personas` - Create custom persona
 
 ## Session History
 
-| Date | Changes |
-|------|---------|
+| Version | Features |
+|---------|----------|
 | V1 | Landing page + database schema |
-| V2 | Language learning page with all learning modes |
+| V2 | Language learning page (6 tabs) |
+| V3 | Auth, APIs, seed data (full-stack) |
 
 ## Tech Stack
 
 - Next.js 16 + React 19
 - Tailwind CSS 4
 - Drizzle ORM + SQLite
+- NextAuth.js authentication
 - Bun package manager

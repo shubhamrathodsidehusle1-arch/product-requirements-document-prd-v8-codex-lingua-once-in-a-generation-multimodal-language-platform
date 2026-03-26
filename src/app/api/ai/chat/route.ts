@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
 import { db } from "@/db";
 import { aiPersonas, aiConversationMessages, aiConversationSessions } from "@/db/schema";
+import { sendChatMessage, getDefaultProvider, type ChatMessage } from "@/lib/ai";
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { userId, personaId, message, language } = body;
+    const { userId, personaId, message, language, provider, model } = body;
 
     if (!userId || !message) {
       return NextResponse.json({ error: "userId and message required" }, { status: 400 });
@@ -39,30 +40,40 @@ export async function POST(request: Request) {
 
     const allMessages = await db.select().from(aiConversationMessages);
     const sessionMessages = allMessages.filter(m => m.sessionId === session.id);
-    const conversationHistory = sessionMessages
-      .slice(-5)
-      .map(m => `${m.role}: ${m.content}`)
-      .join("\n");
+    const conversationHistory = sessionMessages.map(m => ({
+      role: m.role as "user" | "assistant",
+      content: m.content,
+    }));
 
-    let aiResponse = "";
+    const aiProvider = provider || getDefaultProvider();
+    
+    let systemPrompt = `You are a language learning tutor. Help the user practice their target language. Be encouraging, correct mistakes gently, and explain grammar concepts when needed.`;
     
     if (persona) {
-      const personaName = persona.name;
-      const prompt = `You are ${personaName}, ${persona.description}. 
+      systemPrompt = `You are ${persona.name}, ${persona.description}. ${persona.personality ? JSON.parse(persona.personality).tone === "friendly" ? "Be warm and friendly." : "Be professional and clear." : ""} Keep responses educational and encourage practice.`;
+    }
+
+    const messages: ChatMessage[] = [
+      { role: "system", content: systemPrompt },
+      ...conversationHistory.slice(-10),
+      { role: "user", content: message },
+    ];
+
+    let aiResponse: string;
+    let usedModel = model || "kilo-auto/free";
+
+    try {
+      const response = await sendChatMessage(messages, {
+        provider: aiProvider,
+        model: usedModel,
+        maxTokens: 2048,
+        temperature: 0.7,
+      });
+      aiResponse = response.content;
+    } catch (error: any) {
+      console.error("AI provider error:", error.message);
       
-Previous conversation:
-${conversationHistory}
-
-User says: "${message}"
-
-Respond as ${personaName} would, keeping responses educational and encouraging. 
-If the user makes mistakes, gently correct them.
-Keep responses concise and conversational.
-Respond in ${language || "Spanish"} unless user switches language.`;
-
-      aiResponse = generateAIResponse(prompt, personaName);
-    } else {
-      aiResponse = generateAIResponse(message, "Tutor");
+      aiResponse = generateFallbackResponse(message, persona?.name || "Tutor", language || "es");
     }
 
     await db.insert(aiConversationMessages).values({
@@ -76,6 +87,8 @@ Respond in ${language || "Spanish"} unless user switches language.`;
       response: aiResponse,
       persona: persona?.name || "Tutor",
       sessionId: session.id,
+      provider: aiProvider,
+      model: usedModel,
     });
   } catch (error) {
     console.error("Error in AI chat:", error);
@@ -83,19 +96,18 @@ Respond in ${language || "Spanish"} unless user switches language.`;
   }
 }
 
-function generateAIResponse(userMessage: string, personaName: string): string {
-  const lowerMessage = userMessage.toLowerCase();
+function generateFallbackResponse(userMessage: string, personaName: string, language: string): string {
+  const lower = userMessage.toLowerCase();
   
   const responses: Record<string, string[]> = {
     "María": [
       "¡Muy bien! Let's practice more. Try saying: 'Me llamo María y soy de España.'",
       "¡Excelente! You're getting the hang of it. Remember, Spanish verbs change based on who is speaking.",
       "Don't worry about mistakes - they're the best way to learn! Try again: '¿Cómo te llamas?'",
-      "I love your enthusiasm! Let's work on pronunciation. Listen carefully: 'RRRRR' comes from the back of your throat.",
     ],
     "default": [
-      "That's a great question! Let me explain...",
-      "You're doing wonderfully! Keep practicing every day.",
+      "That's a great question! Keep practicing every day.",
+      "You're doing wonderfully! Try using the vocabulary you've learned.",
       "Remember, consistency is key to language learning. Let's continue!",
     ],
   };
@@ -103,22 +115,16 @@ function generateAIResponse(userMessage: string, personaName: string): string {
   const personaResponses = responses[personaName] || responses["default"];
   const randomResponse = personaResponses[Math.floor(Math.random() * personaResponses.length)];
 
-  if (lowerMessage.includes("hola") || lowerMessage.includes("hello") || lowerMessage.includes("hi")) {
-    return personaName === "María" 
+  if (lower.includes("hola") || lower.includes("hello") || lower.includes("hi")) {
+    return language === "es" 
       ? "¡Hola! ¿Cómo estás hoy? Let's practice some Spanish!"
       : "Hello! Great to practice with you today!";
   }
   
-  if (lowerMessage.includes("gracias") || lowerMessage.includes("thank")) {
-    return personaName === "María"
+  if (lower.includes("gracias") || lower.includes("thank")) {
+    return language === "es"
       ? "¡De nada! You're welcome. Keep up the great work!"
-      : "You're welcome! Remember to say 'thank you' in Spanish: ¡Gracias!";
-  }
-  
-  if (lowerMessage.includes("help") || lowerMessage.includes("ayuda") || lowerMessage.includes("?")) {
-    return personaName === "María"
-      ? "¡Con mucho gusto! I'm here to help. Ask me anything about Spanish!"
-      : "I'm here to help! What would you like to learn about?";
+      : "You're welcome!";
   }
 
   return randomResponse;
